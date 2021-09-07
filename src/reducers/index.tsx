@@ -6,14 +6,26 @@
 //         Username: string
 //     }
 // }
+
 const initialState = {
-    currentUser: []
+    currentUser: [],
+    userName: false
 }
 
 const reducer = (state = initialState, action:any) => {
     switch (action.type) {
         case 'REGISTR_USER':
-            return {currentUser: action.payload}
+            return {
+                ...state,
+                currentUser: action.payload,
+                userName: state.userName  
+            }
+        case 'ADD_CHECK':
+            return {
+                ...state,
+                currentUser: state.currentUser,
+                userName: action.payload
+            }    
         default: 
             return state;
     }

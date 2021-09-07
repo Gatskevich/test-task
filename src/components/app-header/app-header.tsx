@@ -3,13 +3,34 @@ import { Link } from 'react-router-dom';
 import './app-header.scss';
 
 const AppHeader = () => {
+    
+    const links = [
+        {
+            id : 1,
+            to: '/infopage',
+            name: 'Infopage'
+        },
+        {
+            id : 2,
+            to: '/changeform',
+            name: 'ChangeForm'
+        },
+        {
+            id : 3,
+            to: '/',
+            name: 'Login'
+        },
+        {
+            id : 4,
+            to: '/registration',
+            name: 'Registration'
+        },
+
+    ]
 
     return (
         <header className="header">
-            <Link to ={'/infopage'} className = "header__link">Infopage</Link>
-            <Link to ={'/changeform'} className = "header__link">ChangeForm</Link>
-            <Link to ={'/'} className = "header__link">Login</Link>
-            <Link to = "/registration" className = "header__link">Registration</Link>
+            {links.map(link => (<Link key={link.id} className = "header__link"  to={link.to}>{link.name}</Link> ))}
         </header>
     )
 };

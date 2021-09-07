@@ -3,7 +3,7 @@ import { MorphReplace } from 'react-svg-morph';
 import './change-form.scss';
 
 const ChangeForm = () => {
-    let [change , setChange] = useState(false)
+    const [change , setChange] = useState(false)
     const CheckBox = () =>{
         return (
             <svg width="24" height="24" fill="#666666" viewBox="0 0 24 24">
@@ -28,7 +28,6 @@ const ChangeForm = () => {
     }
     useEffect(() => {
        setTimeout(toggleChecked,3000)
-       console.log("change form");
     });
   
     return (

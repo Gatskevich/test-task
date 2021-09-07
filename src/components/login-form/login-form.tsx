@@ -1,14 +1,20 @@
 import React, { useState } from 'react'
 import TextField from '@material-ui/core/TextField';
 import Button from '@material-ui/core/Button';
+import {keepUsername} from '../../actions';
 import Service from '../../services/services'
+import {connect} from 'react-redux';
 import './login-form.scss';
 type OnAddClick = {
   onAdd: () => void;
 };
+interface StateProps{
+  keepUsername: (checked: boolean ) => void,
 
-const LoginForm = (props:OnAddClick) => {
-  const ser = new Service();
+}
+type Props = OnAddClick & StateProps
+const LoginForm = (props:Props) => {
+  const ser = Service.getInstance();
     const [form , setForm] = useState({
         email: '',
         password: ''
@@ -16,11 +22,21 @@ const LoginForm = (props:OnAddClick) => {
 
     const submitForm = (e:any) => {
       e.preventDefault();
-      ser.userLoginFetch({
+      ser.postData('http://react-test.somee.com/api/login',{
         Username: form.email,
         Password: form.password,
-      });
-      props.onAdd();
+      })
+      .then((data:any) => {
+        props.keepUsername(true)
+        localStorage.setItem("acessToken", data.data.tokens.acessToken)
+        localStorage.setItem("refreshToken", data.data.tokens.refreshToken)
+        localStorage.setItem("exparedAt", data.data.tokens.exparedAt)
+        props.onAdd();
+      })  
+      .catch((data:any) => {
+        console.log(data);
+      })
+     
         
     };
     return (
@@ -41,4 +57,9 @@ const LoginForm = (props:OnAddClick) => {
     )
 }
 
-export default LoginForm;
+const mapDispatchToProps = {
+  keepUsername
+
+}
+
+export default connect(null, mapDispatchToProps)(LoginForm) ;

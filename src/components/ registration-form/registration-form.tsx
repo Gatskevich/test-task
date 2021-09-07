@@ -1,32 +1,51 @@
 import React, { useState } from 'react'
 import TextField from '@material-ui/core/TextField';
 import Button from '@material-ui/core/Button';
+import {keepUsername} from '../../actions';
 import Service from '../../services/services'
+import {connect} from 'react-redux';
 import './registration-form.scss';
 
 
 type OnAddClick = {
   onAdd: () => void;
 };
+interface StateProps{
+  keepUsername: (checked: boolean ) => void,
 
-function RegistrationForm({onAdd}:OnAddClick) {
-  const ser = new Service();
+}
+type Props = OnAddClick & StateProps
+
+function RegistrationForm(props:Props) {
+  const ser = Service.getInstance();
   const [form , setForm] = useState({
       email: '',
       password: '',
       firstName: '',
       lastName: ''
-    })
-    const submitForm = (e:any) => {
+  })
+
+  const submitForm = (e:any) => {
     e.preventDefault();
-    ser.userPostFetch({
+    ser.postData('http://react-test.somee.com/api/register', {
       Username: form.email,
       Password: form.password,
       FirstName: form.firstName,
       LastName: form.lastName
-    });
-    onAdd();
+    })
+    .then((data:any) => {
+      props.keepUsername(true)
+      localStorage.setItem("acessToken", data.data.tokens.acessToken)
+      localStorage.setItem("refreshToken", data.data.tokens.refreshToken)
+      localStorage.setItem("exparedAt", data.data.tokens.exparedAt)
+      props.onAdd();
+    })
+    .catch((data:any) => {
+      console.log(data);
+    })
+    
   }
+  
     return (
       <form className="registration-form" onSubmit ={submitForm}>
         <h2 className="registration-form__heading">Sign up</h2>
@@ -53,5 +72,11 @@ function RegistrationForm({onAdd}:OnAddClick) {
     )
 }
 
+const mapDispatchToProps = {
+  keepUsername
 
-export default RegistrationForm;
+}
+
+
+export default connect(null, mapDispatchToProps)(RegistrationForm) ;
+

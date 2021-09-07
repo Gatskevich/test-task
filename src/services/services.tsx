@@ -1,19 +1,4 @@
-
-// interface InfoToken {
-//   username: string,
-//   tokens :{
-//     acessToken: string,
-//     refreshToken: string,
-//     exparedAt: number
-//   }
-// }
-
-// interface ServicesInt {
-//   postData: () => InfoToken,
-//   userPostFetch: () => void,
-//   userLoginFetch: () => void,
-//   getRefreshFetch: () => void
-// }
+import axios from 'axios';
 
 interface UserInfo {
   Username: string,
@@ -22,71 +7,48 @@ interface UserInfo {
   LastName: string
 
 }
-interface ShortUserInfo {
 
+interface ShortUserInfo {
   Username: string,
   Password: string
 }
 
-
-
 export default class Services {
+  private static instance: Services;
+  private  headers = { 
+      'Accept': 'application/json',
+      'Content-Type': 'application/json',
+  };
+  public static getInstance(): Services {
+    if (!Services.instance) {
+      Services.instance = new Services();
+    }
 
-  postData = async (url:string, data:UserInfo|ShortUserInfo) => {
-    const res = await fetch(url, {
-      method: "POST",
-      headers: {
-          'Accept': 'application/json',
-          'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({...data})
-    });
-
-    return await res.json();
+    return Services.instance;
+  }
+  public postData = async(url:string, data:UserInfo|ShortUserInfo) => {
+    return axios(
+      {
+        method: "POST",
+        url, 
+        headers:this.headers,
+        data: {...data}
+      });
   };
 
-  userPostFetch =  async(user:UserInfo) => {
-    this.postData('http://react-test.somee.com/api/register', user)
-    .then(data => {
-      localStorage.setItem("acessToken", data.tokens.acessToken)
-      localStorage.setItem("refreshToken", data.tokens.refreshToken)
+  public getRefreshFetch = () => {
+    const token = localStorage.getItem("refreshToken");
+    const tokenQery = `refreshToken=${token}`;
+    return axios('http://react-test.somee.com/api/refresh?'+ tokenQery, {
+      method: "GET",
+      headers: this.headers,
     })
   }
 
-  userLoginFetch =  async(user:ShortUserInfo) => {
-    this.postData('http://react-test.somee.com/api/login', user)
-    .then(data => {
-      localStorage.setItem("acessToken", data.tokens.acessToken)
-      localStorage.setItem("refreshToken", data.tokens.refreshToken)
-    })  
-  }
-  getRefreshFetch = () => {
-    
-    const token = localStorage.getItem("refreshToken");
-    const tokenQery = `refreshToken=${token}`;
-    if (token) {
-      return fetch('http://react-test.somee.com/api/refresh?'+ tokenQery, {
-        method: "GET",
-        headers: {
-          'Accept': 'application/json',
-          'Content-Type': 'application/json',
-        }
-      })
-      .then(resp => resp.json())
-      .then(data => {
-        if (data.message) {
-          console.log(data.message);
-          localStorage.clear();
-        } 
-      })
-    }
-  }
-
-  getProfileFetch = () => {
+  public getProfileFetch = () => {
     const token = localStorage.getItem("acessToken");
-        
-    return  fetch('http://react-test.somee.com/api/user', {
-      method: "GET",
+    return  axios('http://react-test.somee.com/api/user', {
+        method: "GET",
         headers: {
          'Accept': 'application/json',
          'Content-Type': 'application/json',
