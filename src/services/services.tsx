@@ -1,17 +1,5 @@
 import axios from 'axios';
-
-interface UserInfo {
-  Username: string,
-  Password: string,
-  FirstName: string,
-  LastName: string
-
-}
-
-interface ShortUserInfo {
-  Username: string,
-  Password: string
-}
+import {UserInfo, ShortUserInfo} from '../interfaces/interfaces'
 
 export default class Services {
   private static instance: Services;
@@ -36,7 +24,7 @@ export default class Services {
       });
   };
 
-  public getRefreshFetch = () => {
+  public getRefreshToken = () => {
     const token = localStorage.getItem("refreshToken");
     const tokenQery = `refreshToken=${token}`;
     return axios('http://react-test.somee.com/api/refresh?'+ tokenQery, {
@@ -45,7 +33,7 @@ export default class Services {
     })
   }
 
-  public getProfileFetch = () => {
+  public getProfileUser = () => {
     const token = localStorage.getItem("acessToken");
     return  axios('http://react-test.somee.com/api/user', {
         method: "GET",

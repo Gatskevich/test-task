@@ -1,4 +1,5 @@
 import React from 'react';
+import {Route} from 'react-router-dom';
 import InfoUser from '../info-user'
 
 
@@ -7,7 +8,7 @@ const InfoPage = () => {
   
     return (
         <div>
-            <InfoUser  />
+               <Route component={InfoUser}/>
         </div>
         
     )

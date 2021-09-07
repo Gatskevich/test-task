@@ -1,3 +1,4 @@
+import {ActionInterface, InitialStateInterface} from '../interfaces/interfaces'
 // interface actionType {
 //     type:string,
 //     payload : {
@@ -7,24 +8,24 @@
 //     }
 // }
 
-const initialState = {
+const initialState:InitialStateInterface= {
     currentUser: [],
-    userName: false
+    checkUser: false
 }
 
-const reducer = (state = initialState, action:any) => {
+const reducer = (state = initialState, action:ActionInterface) => {
     switch (action.type) {
         case 'REGISTR_USER':
             return {
                 ...state,
                 currentUser: action.payload,
-                userName: state.userName  
+                checkUser: state.checkUser  
             }
         case 'ADD_CHECK':
             return {
                 ...state,
                 currentUser: state.currentUser,
-                userName: action.payload
+                checkUser: action.payload
             }    
         default: 
             return state;

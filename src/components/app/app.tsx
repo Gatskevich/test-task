@@ -1,7 +1,7 @@
 import React, { Suspense, lazy, useEffect}from 'react'
 import { Route, Switch,Redirect} from 'react-router-dom';
 import {connect} from 'react-redux';
-import {keepUsername,registrUser} from '../../actions';
+import {checkUsername,registrUser} from '../../actions';
 import Service from '../../services/services'
 import AppHeader from '../app-header';
 import './app.scss';
@@ -12,8 +12,8 @@ const RegistrationPage = lazy(() => import('../pages/registretion-page'));
 const LoginPage = lazy(() => import('../pages/login-page'));
 const ChangeFormPage:any = lazy(() => import('../pages/change-form-page'));
 
-interface KeepUsernameProps{
-  keepUsername: (checked: boolean ) => void,
+interface CheckUsernameProps{
+  checkUsername: (checked: boolean ) => void,
 
 }
 interface StateProps{
@@ -30,18 +30,20 @@ interface UserNameProps{
 
 }
 
-type Props = StateProps & UserNameProps & KeepUsernameProps
-const App = (props:Props) => {
+type Props = StateProps & UserNameProps & CheckUsernameProps
+
+
+const App = (props:any) => {
   const ser = Service.getInstance();
   useEffect(() => {
-    ser.getProfileFetch()
+    ser.getProfileUser()
     .then((data)=>{
-      props.keepUsername(true);
+      props.checkUsername(true);
       props.registrUser(data.data);
     })
     .catch(() => {
       localStorage.clear();
-      props.keepUsername(false);
+      props.checkUsername(false);
     })
     // return () => {
       
@@ -53,10 +55,10 @@ const App = (props:Props) => {
       <Suspense fallback={<div>Loading...</div>}>
         <Switch>
           <Route  path = '/infopage'>
-          {!props.userName ? <Redirect to="/registration" /> : <InfoPage />}
+          {!props.checkUser ? <Redirect to="/registration" /> : <InfoPage />}
           </Route>
           <Route  path = '/changeform'>
-          {!props.userName ? <Redirect to="/registration" /> : <ChangeFormPage />}
+          {!props.checkUser ? <Redirect to="/registration" /> : <ChangeFormPage />}
           </Route>
           <Route  path = '/registration' exact component={RegistrationPage}/>
           <Route path='/' exact component={LoginPage}/>
@@ -66,14 +68,14 @@ const App = (props:Props) => {
   )
 }
 
-const mapStateToProps =  (state: UserNameProps) =>{
+const mapStateToProps =  (state: any) =>{
   return {
-      userName: state.userName,
+    checkUser: state.reducer.checkUser,
   }
 }
 const mapDispatchToProps = {
   registrUser,
-  keepUsername
+  checkUsername
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(App) ;

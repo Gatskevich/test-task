@@ -1,15 +1,12 @@
 import React from 'react';
 import { connect } from 'react-redux';
+import {CurrentUserInterface, StateInterfaces} from '../../interfaces/interfaces'
 import './info-user.scss';
 
 interface StateProps {
-    currentUser: {
-        username: string,
-        firstName: string,
-        lastName: string
-    }
+    currentUser: CurrentUserInterface
 }
-const InfoUser = (props:any) => {
+const InfoUser = (props:StateProps) => {
     return (
         
         <div>
@@ -20,9 +17,10 @@ const InfoUser = (props:any) => {
         
     )
 }
-const mapStateToProps =  (state: StateProps) =>{
+const mapStateToProps =  (state: StateInterfaces) =>{
+    console.log("State", state);
     return {
-        currentUser: state.currentUser,
+        currentUser: state.reducer.currentUser,
     }
 }
 export default connect(mapStateToProps, null)(InfoUser) ;

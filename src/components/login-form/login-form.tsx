@@ -1,44 +1,39 @@
 import React, { useState } from 'react'
 import TextField from '@material-ui/core/TextField';
 import Button from '@material-ui/core/Button';
-import {keepUsername} from '../../actions';
+import {checkUsername} from '../../actions';
 import Service from '../../services/services'
 import {connect} from 'react-redux';
+import ServiceToken from '../../services/servicesToken'
+import {StateProps, HistoryProps} from '../../interfaces/interfaces'
 import './login-form.scss';
-type OnAddClick = {
-  onAdd: () => void;
-};
-interface StateProps{
-  keepUsername: (checked: boolean ) => void,
 
-}
-type Props = OnAddClick & StateProps
+
+type Props = HistoryProps & StateProps
+
 const LoginForm = (props:Props) => {
   const ser = Service.getInstance();
+  const serToken = new ServiceToken();
     const [form , setForm] = useState({
         email: '',
         password: ''
     })
 
-    const submitForm = (e:any) => {
-      e.preventDefault();
-      ser.postData('http://react-test.somee.com/api/login',{
-        Username: form.email,
-        Password: form.password,
-      })
-      .then((data:any) => {
-        props.keepUsername(true)
-        localStorage.setItem("acessToken", data.data.tokens.acessToken)
-        localStorage.setItem("refreshToken", data.data.tokens.refreshToken)
-        localStorage.setItem("exparedAt", data.data.tokens.exparedAt)
-        props.onAdd();
-      })  
-      .catch((data:any) => {
-        console.log(data);
-      })
-     
-        
-    };
+  const submitForm = (e:any) => {
+    e.preventDefault();
+    ser.postData('http://react-test.somee.com/api/login',{
+      Username: form.email,
+      Password: form.password,
+    })
+    .then((data:any) => {
+      props.checkUsername(true)
+      serToken.addToken(data);
+      setTimeout(()=>props.history.push('/infopage'),900);
+    })  
+    .catch((data:any) => {
+      console.log(data);
+    })
+  };
     return (
         <form className="registration-form" onSubmit={submitForm}>
         <h2 className="registration-form__heading">Sign in</h2>
@@ -58,7 +53,7 @@ const LoginForm = (props:Props) => {
 }
 
 const mapDispatchToProps = {
-  keepUsername
+  checkUsername
 
 }
 

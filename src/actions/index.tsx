@@ -1,9 +1,5 @@
+import {RegUserInfo} from '../interfaces/interfaces'
 
-interface RegUserInfo {
-  Username: string,
-  FirstName: string,
-  LastName: string
-}
 
 const registrUser = (newUser:RegUserInfo) => {
     return {
@@ -11,7 +7,7 @@ const registrUser = (newUser:RegUserInfo) => {
         payload: newUser
     }
 }
-const keepUsername = (checked:boolean) => {
+const checkUsername = (checked:boolean) => {
     return {
         type: 'ADD_CHECK',
         payload: checked
@@ -21,5 +17,5 @@ const keepUsername = (checked:boolean) => {
 
 export {
     registrUser,
-    keepUsername
+    checkUsername
 };

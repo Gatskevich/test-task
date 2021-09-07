@@ -1,23 +1,18 @@
 import React, { useState } from 'react'
 import TextField from '@material-ui/core/TextField';
 import Button from '@material-ui/core/Button';
-import {keepUsername} from '../../actions';
+import {checkUsername} from '../../actions';
 import Service from '../../services/services'
+import ServiceToken from '../../services/servicesToken'
 import {connect} from 'react-redux';
+import {StateProps, HistoryProps} from '../../interfaces/interfaces'
 import './registration-form.scss';
 
-
-type OnAddClick = {
-  onAdd: () => void;
-};
-interface StateProps{
-  keepUsername: (checked: boolean ) => void,
-
-}
-type Props = OnAddClick & StateProps
+type Props = StateProps & HistoryProps
 
 function RegistrationForm(props:Props) {
   const ser = Service.getInstance();
+  const serToken = new ServiceToken();
   const [form , setForm] = useState({
       email: '',
       password: '',
@@ -34,11 +29,9 @@ function RegistrationForm(props:Props) {
       LastName: form.lastName
     })
     .then((data:any) => {
-      props.keepUsername(true)
-      localStorage.setItem("acessToken", data.data.tokens.acessToken)
-      localStorage.setItem("refreshToken", data.data.tokens.refreshToken)
-      localStorage.setItem("exparedAt", data.data.tokens.exparedAt)
-      props.onAdd();
+      props.checkUsername(true)
+      serToken.addToken(data);
+      setTimeout(()=>props.history.push('/infopage'),900);
     })
     .catch((data:any) => {
       console.log(data);
@@ -73,7 +66,7 @@ function RegistrationForm(props:Props) {
 }
 
 const mapDispatchToProps = {
-  keepUsername
+  checkUsername
 
 }
 
