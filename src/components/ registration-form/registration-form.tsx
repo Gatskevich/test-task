@@ -22,7 +22,7 @@ function RegistrationForm(props:Props) {
 
   const submitForm = (e:any) => {
     e.preventDefault();
-    ser.postData('http://react-test.somee.com/api/register', {
+    ser.postData('api/register', {
       Username: form.email,
       Password: form.password,
       FirstName: form.firstName,

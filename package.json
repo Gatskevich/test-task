@@ -36,12 +36,6 @@
       "react-app/jest"
     ]
   },
-  "proxy": {
-    "http://react-test.somee.com/*": {
-      "target": "http://react-test.somee.com",
-      "changeOrigin": true
-    }
-  },
   "browserslist": [
     "last 2 versions"
   ],

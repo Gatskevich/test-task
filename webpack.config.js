@@ -1,5 +1,6 @@
 var path = require('path');
 const HtmlWebpackPlugin = require("html-webpack-plugin");
+
 module.exports = {
     entry: "./src/index.tsx",
     output: {
@@ -14,6 +15,14 @@ module.exports = {
     },
     devServer: {
       historyApiFallback: true,
+      port: 8081,
+      proxy: {
+        '/api/**': {
+          target: 'http://react-test.somee.com',
+          secure: false,
+          changeOrigin: true
+        },
+      },
 
     },
     module: {

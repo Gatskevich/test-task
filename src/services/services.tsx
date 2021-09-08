@@ -27,7 +27,7 @@ export default class Services {
   public getRefreshToken = () => {
     const token = localStorage.getItem("refreshToken");
     const tokenQery = `refreshToken=${token}`;
-    return axios('http://react-test.somee.com/api/refresh?'+ tokenQery, {
+    return axios('api/refresh?'+ tokenQery, {
       method: "GET",
       headers: this.headers,
     })
@@ -35,7 +35,7 @@ export default class Services {
 
   public getProfileUser = () => {
     const token = localStorage.getItem("acessToken");
-    return  axios('http://react-test.somee.com/api/user', {
+    return  axios('api/user', {
         method: "GET",
         headers: {
          'Accept': 'application/json',

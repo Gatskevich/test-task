@@ -21,7 +21,7 @@ const LoginForm = (props:Props) => {
 
   const submitForm = (e:any) => {
     e.preventDefault();
-    ser.postData('http://react-test.somee.com/api/login',{
+    ser.postData('api/login',{
       Username: form.email,
       Password: form.password,
     })
