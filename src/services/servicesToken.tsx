@@ -34,5 +34,6 @@ export default class ServicesToken {
         localStorage.setItem("refreshToken", data.data.tokens.refreshToken)
         localStorage.setItem("exparedAt", data.data.tokens.exparedAt)
         this.createTimer(data.data.tokens.exparedAt)
+        this.ser.getProfileUser();
     }
 }

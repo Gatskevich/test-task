@@ -37,23 +37,13 @@ export default class Services {
 
   public getProfileUser = () => {
     const token = localStorage.getItem("acessToken");
-    return  axios('api/user', {
-        method: "GET",
+    return  axios.get('api/user', {
         headers: {
          'Accept': 'application/json',
          'Content-Type': 'application/json',
           'Authorization': `${token}`
         },
+        cancelToken: this.source.token
     })            
-  }
-  public getProfileUserTest = () => {
-    axios.get('api/user', {cancelToken: this.source.token})  
-    .catch(function (thrown) {
-      if (axios.isCancel(thrown)) {
-        console.log('Request canceled', thrown.message);
-      } else {
-        console.log('Fail', thrown.message);
-      }
-    });         
   }
 }

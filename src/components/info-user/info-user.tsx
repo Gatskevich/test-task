@@ -18,7 +18,6 @@ const InfoUser = (props:StateProps) => {
     )
 }
 const mapStateToProps =  (state: StateInterfaces) =>{
-    console.log("State", state);
     return {
         currentUser: state.reducer.currentUser,
     }
