@@ -3,6 +3,8 @@ import {UserInfo, ShortUserInfo} from '../interfaces/interfaces'
 
 export default class Services {
   private static instance: Services;
+  private CancelToken = axios.CancelToken;
+  private source = this.CancelToken.source();
   private  headers = { 
       'Accept': 'application/json',
       'Content-Type': 'application/json',
@@ -41,7 +43,17 @@ export default class Services {
          'Accept': 'application/json',
          'Content-Type': 'application/json',
           'Authorization': `${token}`
-        }
+        },
     })            
+  }
+  public getProfileUserTest = () => {
+    axios.get('api/user', {cancelToken: this.source.token})  
+    .catch(function (thrown) {
+      if (axios.isCancel(thrown)) {
+        console.log('Request canceled', thrown.message);
+      } else {
+        console.log('Fail', thrown.message);
+      }
+    });         
   }
 }
