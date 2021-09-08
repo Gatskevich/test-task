@@ -1,12 +1,4 @@
-import {ActionInterface, InitialStateInterface} from '../interfaces/interfaces'
-// interface actionType {
-//     type:string,
-//     payload : {
-//         FirstName: string,
-//         LastName: string,
-//         Username: string
-//     }
-// }
+import {InitialStateInterface, ActionInterface} from '../interfaces/interfaces'
 
 const initialState:InitialStateInterface= {
     currentUser: [],
